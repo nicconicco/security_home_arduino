@@ -1,11 +1,3 @@
-/*
- * Created by ArduinoGetStarted.com
- *
- * This example code is in the public domain
- *
- * Tutorial page: https://arduinogetstarted.com/tutorials/arduino-keypad
- */
-
 #include <Keypad.h>
 
 const int ROW_NUM = 4; //four rows
