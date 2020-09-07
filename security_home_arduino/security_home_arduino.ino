@@ -2,49 +2,101 @@
 
 const int ROW_NUM = 4; //four rows
 const int COLUMN_NUM = 3; //three columns
+const int COLUMN_NUM_4 = 4; //three columns
 
-char keys[ROW_NUM][COLUMN_NUM] = {
-  {'1','2','3'},
-  {'4','5','6'},
-  {'7','8','9'},
-  {'*','0','#'}
+char hexaKeys[ROW_NUM][COLUMN_NUM_4] = {
+  {'1', '2', '3', 'A'},
+  {'4', '5', '6', 'B'},
+  {'7', '8', '9', 'C'},
+  {'*', '0', '#', 'D'}
 };
 
-byte pin_rows[ROW_NUM] = {9, 8, 7, 6}; //connect to the row pinouts of the keypad
-byte pin_column[COLUMN_NUM] = {5, 4, 3}; //connect to the column pinouts of the keypad
+byte rowPins[ROW_NUM] = {9, 8, 7, 6};
+byte colPins[COLUMN_NUM_4] = {5, 4, 3, 2};
 
-Keypad keypad = Keypad( makeKeymap(keys), pin_rows, pin_column, ROW_NUM, COLUMN_NUM );
+//char keys[ROW_NUM][COLUMN_NUM] = {
+//  {'1','2','3'},
+//  {'4','5','6'},
+//  {'7','8','9'},
+//  {'*','0','#'}
+//};
+//
+//byte pin_rows[ROW_NUM] = {9, 8, 7, 6};
+//byte pin_column[COLUMN_NUM] = {5, 4, 3};
 
-const String password = "1234"; // change your password here
+Keypad keypad = Keypad( makeKeymap(hexaKeys), rowPins, colPins, ROW_NUM, COLUMN_NUM_4 );
+
+const String password = "6666"; // change your password here
 String input_password;
 
-void setup(){
+void setup() {
   Serial.begin(9600);
   input_password.reserve(32); // maximum input characters is 33, change if needed
 }
 
-void loop(){
+void loop() {
   char key = keypad.getKey();
 
-  if (key){
+  if (key) {
     Serial.println(key);
 
-    if(key == '*') {
-      input_password = ""; // clear input password
-    } else if(key == '#') {
-      //Serial.println(input_password);
-      if(password == input_password) {
-        Serial.println("password is correct");
-        // DO YOUR WORK HERE
-        
-      } else {
-        Serial.println("password is incorrect, try again");
-      }
+    switch (key)
+    {
+      case '*':
+        input_password = ""; // clear input password
+        break;
 
-      input_password = ""; // clear input password
-    } else {
-      input_password += key; // append new character to input password string
-      //Serial.println(input_password);
+      case 'A':
+        input_password = ""; // clear input password
+        Serial.println("Activated");
+        break;
+
+      case 'B':
+        input_password = ""; // clear input password
+        Serial.println("Sound ON");
+        break;
+
+      case 'C':
+        input_password = ""; // clear input password
+        Serial.println("Sound OFF");
+        break;
+      case 'D':
+        input_password = ""; // clear input password
+        Serial.println("Deactivated");
+        break;
+
+      case '#':
+        //Serial.println(input_password);
+        if (password == input_password) {
+          Serial.println("password is correct");
+        } else {
+          Serial.println("password is incorrect, try again");
+        }
+
+        input_password = "";
+        break;
+
+      default:
+          input_password += key;
+          //Serial.println(input_password);
     }
+
+//    if (key == '*') {
+//      input_password = ""; // clear input password
+//    } else if (key == '#') {
+//      //Serial.println(input_password);
+//      if (password == input_password) {
+//        Serial.println("password is correct");
+//        // DO YOUR WORK HERE
+//
+//      } else {
+//        Serial.println("password is incorrect, try again");
+//      }
+//
+//      input_password = ""; // clear input password
+//    } else {
+//      input_password += key; // append new character to input password string
+//      //Serial.println(input_password);
+//    }
   }
 }
