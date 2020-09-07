@@ -4,10 +4,32 @@ const int ROW_NUM = 4; //four rows
 const int COLUMN_NUM = 3; //three columns
 const int COLUMN_NUM_4 = 4; //three columns
 
-char* musica[] = {"La","Re","Fa","Sol","La","Re", "Fa", "Sol", "Mi", "Pausa", "Sol", "Do", "Fa", "Mi", "Sol", "Do", "Fa", "Mi", "Re", "Fim"}; //Game of Thrones
-int duracao[] = {700, 500, 300, 250, 250, 300, 200, 200, 700, 200, 500, 500, 200, 200, 200, 500, 200, 200, 500};
-char* starwars[] = {"La","Pausa","La","Pausa","La","Pausa","Fa","Do","La","Pausa","Fa","Do","La","Pausa","Mi","Pausa","Mi","Pausa","Mi","Pausa","Fa","Do","Sol","Pausa","Fa","Do","La","Pausa","La","Pausa","La","Pausa","La","Pausa","La","Pausa","Sol#","Pausa","Sol","Fa#","Fa","Fa#","Fim"}; //Marcha Imperial
-int dur[] = {400, 100, 400, 100, 400, 100, 300, 200, 300, 100, 300, 200, 300, 200, 400, 100, 400, 100, 400, 100, 300, 300, 200, 100 , 300, 300, 200, 200, 400, 50, 400, 50, 400, 50, 400, 50, 300, 50, 300, 200, 200, 200};
+/**
+   Star wars music
+*/
+const int d = 294;
+const int e = 329;
+const int f = 349;
+const int g = 391;
+const int gS = 415;
+const int a = 440;
+const int aS = 455;
+const int b = 466;
+const int cH = 523;
+const int cSH = 554;
+const int dH = 587;
+const int dSH = 622;
+const int eH = 659;
+const int fH = 698;
+const int fSH = 740;
+const int gH = 784;
+const int gSH = 830;
+const int aH = 880;
+int counter = 0;
+const int ledPin1 = 12;
+const int ledPin2 = 13;
+
+boolean alarmActivated = true;
 
 
 char hexaKeys[ROW_NUM][COLUMN_NUM_4] = {
@@ -42,6 +64,8 @@ void setup() {
   Serial.begin(9600);
   input_password.reserve(32); // maximum input characters is 33, change if needed
   pinMode(buzzer, OUTPUT);
+  pinMode(ledPin1, OUTPUT);
+  pinMode(ledPin2, OUTPUT);
 }
 
 void loop() {
@@ -59,25 +83,28 @@ void loop() {
 
       case 'A':
         clearInputPassword();
-        Serial.println("Activated");
+        Serial.println("Activated Alarm");
+        alarmActivated = true;
         break;
 
       case 'B':
         clearInputPassword();
         Serial.println("Sound ON");
-        soundAlarm(true, true);
+        tocar();
+
         break;
 
       case 'C':
         clearInputPassword();
         Serial.println("Sound OFF");
-        soundAlarm(false, true);
+        soundAlarm(alarmActivated);
         break;
 
       case 'D':
         clearInputPassword();
-        soundAlarm(false, false);
+        soundAlarm(false);
         Serial.println("Deactivated");
+        alarmActivated = false;
         break;
 
       case '#':
@@ -97,59 +124,158 @@ void checkPassword(String input_password) {
     Serial.println("password is correct");
   } else {
     Serial.println("password is incorrect, try again");
-    soundAlarm(true, false);
+    soundAlarm(alarmActivated);
   }
 }
 
-void soundAlarm(boolean alarmStatus, boolean fromTest) {
+void soundAlarm(boolean alarmStatus) {
   if (alarmStatus) {
-    // Aciona o buzzer na frequencia relativa ao Dó em Hz
-//    tone(buzzer, 261);
-//    // Espera um tempo para Desativar
-//    delay(200);
-//    //Desativa o buzzer
-//    noTone(buzzer);
-//    // Aciona o buzzer na frequencia relativa ao Ré em Hz
-//    tone(buzzer, 293);
-//    delay(200);
-//    noTone(buzzer);
-//    // Aciona o buzzer na frequencia relativa ao Mi em Hz
-//    tone(buzzer, 329);
-//    delay(200);
-//    noTone(buzzer);
-//    // Aciona o buzzer na frequencia relativa ao Fá em Hz
-//    tone(buzzer, 349);
-//    delay(200);
-//    noTone(buzzer);
-//    // Aciona o buzzer na frequencia relativa ao Sol em Hz
-//    tone(buzzer, 392);
-//    delay(200);
-//    noTone(buzzer);
-   tocar(starwars,dur);
-  } else if(fromTest == false) {
+    int i = 0;
+    while (i < 5) {
+      musicAlarme();
+      i++;
+    }
+  } else {
     noTone(buzzer);
   }
 }
+void musicAlarme() {
+  //Aciona o buzzer na frequencia relativa ao Dó em Hz
+  tone(buzzer, 261);
+  // Espera um tempo para Desativar
+  delay(200);
+  //Desativa o buzzer
+  noTone(buzzer);
+  // Aciona o buzzer na frequencia relativa ao Ré em Hz
+  tone(buzzer, 293);
+  delay(200);
+  noTone(buzzer);
+  // Aciona o buzzer na frequencia relativa ao Mi em Hz
+  tone(buzzer, 329);
+  delay(200);
+  noTone(buzzer);
+  // Aciona o buzzer na frequencia relativa ao Fá em Hz
+  tone(buzzer, 349);
+  delay(200);
+  noTone(buzzer);
+  // Aciona o buzzer na frequencia relativa ao Sol em Hz
+  tone(buzzer, 392);
+  delay(200);
+  noTone(buzzer);
+}
 
-void tocar(char* mus[], int tempo[]){
-  int tom = 0;
-  for(int i = 0; mus[i]!="Fim";i++){
-    if(mus[i] == "Do") tom = 262;
-    if(mus[i] == "Re") tom = 294;
-    if(mus[i] == "Mi") tom = 330;
-    if(mus[i] == "Fa") tom = 349;
-    if(mus[i] == "Sol") tom = 392;
-    if(mus[i] == "La") tom = 440;
-    if(mus[i] == "Si") tom = 494;
-    if(mus[i] == "Do#") tom = 528;
-    if(mus[i] == "Re#") tom = 622;
-    if(mus[i] == "Fa#") tom = 370;
-    if(mus[i] == "Sol#") tom = 415;
-    if(mus[i] == "La#") tom = 466;
-    if(mus[i] == "Pausa") tom = 0;
-    tone(buzzer, tom, tempo[i]);
-    delay(tempo[i]);
+void tocar() {
+  //Play first section
+  firstSection();
+
+  //Play second section
+  secondSection();
+
+  //Variant 1
+  beep(f, 250);
+  beep(gS, 500);
+  beep(f, 350);
+  beep(a, 125);
+  beep(cH, 500);
+  beep(a, 375);
+  beep(cH, 125);
+  beep(eH, 650);
+
+  delay(500);
+
+  //Repeat second section
+  secondSection();
+
+  //Variant 2
+  beep(f, 250);
+  beep(gS, 500);
+  beep(f, 375);
+  beep(cH, 125);
+  beep(a, 500);
+  beep(f, 375);
+  beep(cH, 125);
+  beep(a, 650);
+
+  delay(650);
+}
+
+void beep(int note, int duration)
+{
+  //Play tone on buzzerPin
+  tone(buzzer, note, duration);
+
+  //Play different LED depending on value of 'counter'
+  if (counter % 2 == 0)
+  {
+    digitalWrite(ledPin1, HIGH);
+    delay(duration);
+    digitalWrite(ledPin1, LOW);
+  } else
+  {
+    digitalWrite(ledPin2, HIGH);
+    delay(duration);
+    digitalWrite(ledPin2, LOW);
   }
+
+  //Stop tone on buzzerPin
+  noTone(buzzer);
+
+  delay(50);
+
+  //Increment counter
+  counter++;
+}
+
+void firstSection()
+{
+  beep(a, 500);
+  beep(a, 500);
+  beep(a, 500);
+  beep(f, 350);
+  beep(cH, 150);
+  beep(a, 500);
+  beep(f, 350);
+  beep(cH, 150);
+  beep(a, 650);
+
+  delay(500);
+
+  beep(eH, 500);
+  beep(eH, 500);
+  beep(eH, 500);
+  beep(fH, 350);
+  beep(cH, 150);
+  beep(gS, 500);
+  beep(f, 350);
+  beep(cH, 150);
+  beep(a, 650);
+
+  delay(500);
+}
+
+void secondSection()
+{
+  beep(aH, 500);
+  beep(a, 300);
+  beep(a, 150);
+  beep(aH, 500);
+  beep(gSH, 325);
+  beep(gH, 175);
+  beep(fSH, 125);
+  beep(fH, 125);
+  beep(fSH, 250);
+
+  delay(325);
+
+  beep(aS, 250);
+  beep(dSH, 500);
+  beep(dH, 325);
+  beep(cSH, 175);
+  beep(cH, 125);
+  beep(b, 125);
+  beep(cH, 250);
+
+  delay(350);
 }
 
 void clearInputPassword() {
