@@ -80,23 +80,5 @@ void loop() {
           input_password += key;
           //Serial.println(input_password);
     }
-
-//    if (key == '*') {
-//      input_password = ""; // clear input password
-//    } else if (key == '#') {
-//      //Serial.println(input_password);
-//      if (password == input_password) {
-//        Serial.println("password is correct");
-//        // DO YOUR WORK HERE
-//
-//      } else {
-//        Serial.println("password is incorrect, try again");
-//      }
-//
-//      input_password = ""; // clear input password
-//    } else {
-//      input_password += key; // append new character to input password string
-//      //Serial.println(input_password);
-//    }
   }
 }
