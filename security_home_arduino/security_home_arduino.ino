@@ -43,42 +43,50 @@ void loop() {
     switch (key)
     {
       case '*':
-        input_password = ""; // clear input password
+        clearInputPassword();
         break;
 
       case 'A':
-        input_password = ""; // clear input password
+        clearInputPassword();
         Serial.println("Activated");
         break;
 
       case 'B':
-        input_password = ""; // clear input password
+        clearInputPassword();
         Serial.println("Sound ON");
         break;
 
       case 'C':
-        input_password = ""; // clear input password
+        clearInputPassword();
         Serial.println("Sound OFF");
         break;
+
       case 'D':
-        input_password = ""; // clear input password
+        clearInputPassword();
         Serial.println("Deactivated");
         break;
 
       case '#':
-        //Serial.println(input_password);
-        if (password == input_password) {
-          Serial.println("password is correct");
-        } else {
-          Serial.println("password is incorrect, try again");
-        }
-
-        input_password = "";
+        checkPassword(input_password);
         break;
 
       default:
-          input_password += key;
-          //Serial.println(input_password);
+        input_password += key;
+        //Serial.println(input_password);
     }
   }
+}
+
+void checkPassword(String input_password) {
+  //Serial.println(input_password);
+  if (password == input_password) {
+    Serial.println("password is correct");
+  } else {
+    Serial.println("password is incorrect, try again");
+  }
+}
+
+void clearInputPassword() {
+  input_password = ""; // clear input password
+  Serial.println("clear input password");
 }
